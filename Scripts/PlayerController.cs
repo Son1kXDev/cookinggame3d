@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 2f;
-    public float rotateTime = 0.1f;
-    public float smoothRotate;
-
+    [Header("Управление")]
+    [SerializeField] private float speed = 2f;
+    [SerializeField] private float rotateTime = 0.1f;
+    private float smoothRotate;
     private CharacterController controller;
+
+    [Header("Взаимодействие")]
+    [SerializeField] private Transform hands;
+    [SerializeField] private Transform defaultTransform;
+    [SerializeField] private InteractableObject pickedObject;
+    [SerializeField] private bool isInteracting;
+
+    public bool inTrigger = false;
+    public InteractableObject tempTrigger;
 
     private void Start()
     {
@@ -18,9 +27,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Moving();
+        PickNDrop();
     }
 
-    public void Moving()
+    private void Moving()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -35,5 +45,44 @@ public class PlayerController : MonoBehaviour
 
             controller.Move(moveDirection * speed * Time.deltaTime);
         }
+    }
+
+    private void PickNDrop()
+    {
+        if (!inTrigger) return;
+
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            switch (isInteracting)
+            {
+                case true:
+                    Drop();
+                    break;
+
+                case false:
+                    PickUp();
+                    break;
+            }
+        }
+    }
+
+    public void PickUp()
+    {
+        if (isInteracting || tempTrigger.isPickedUp) return;
+
+        pickedObject = tempTrigger;
+        pickedObject.isPickedUp = true;
+        pickedObject.gameObject.transform.SetParent(hands);
+        pickedObject.gameObject.transform.localPosition = Vector3.zero;
+        isInteracting = true;
+    }
+
+    private void Drop()
+    {
+        if (pickedObject == null) return;
+
+        pickedObject.isPickedUp = false;
+        pickedObject.gameObject.transform.SetParent(null);
+        isInteracting = false;
     }
 }
