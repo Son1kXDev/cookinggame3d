@@ -17,6 +17,7 @@ public class PlayerController : MonoBehaviour
     private InteractableObject pickedObject;
     [HideInInspector] public InteractableObject tempTrigger;
     [HideInInspector] public bool inTrigger = false;
+    [HideInInspector] public bool waitForCut = false;
     private bool isInteracting;
     private bool inSpawner;
 
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (waitForCut) return;
         Moving();
         Interactable();
     }
@@ -55,17 +57,24 @@ public class PlayerController : MonoBehaviour
 
     private void Interactable()
     {
-        if (inTrigger && Input.GetKeyDown(KeyCode.E))
+        if (inTrigger)
         {
-            switch (isInteracting)
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                case true:
-                    Drop();
-                    break;
+                switch (isInteracting)
+                {
+                    case true:
+                        Drop();
+                        break;
 
-                case false:
-                    PickUp();
-                    break;
+                    case false:
+                        PickUp();
+                        break;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.R) && tempTrigger.isPlaced)
+            {
+                tempTrigger.CutObj(this);
             }
         }
         if (inSpawner && Input.GetKeyDown(KeyCode.Q))
@@ -81,7 +90,7 @@ public class PlayerController : MonoBehaviour
         pickedObject = tempTrigger;
         pickedObject.isPickedUp = true;
         pickedObject.GetComponent<Rigidbody>().isKinematic = true;
-        pickedObject.GetComponent<MeshCollider>().enabled = false;
+        pickedObject.ChangeColliderState(false);
         pickedObject.gameObject.transform.SetParent(hands);
         pickedObject.gameObject.transform.localPosition = Vector3.zero;
         pickedObject.transform.localEulerAngles = Vector3.zero;
@@ -99,7 +108,7 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = BallisticVel(50);
         pickedObject.GetComponent<Rigidbody>().velocity = dir;
         pickedObject.transform.localEulerAngles = Vector3.zero;
-        pickedObject.GetComponent<MeshCollider>().enabled = true;
+        pickedObject.ChangeColliderState(true);
         pickedObject = null;
     }
 

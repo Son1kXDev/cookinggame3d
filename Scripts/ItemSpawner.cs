@@ -15,14 +15,6 @@ public class ItemSpawner : MonoBehaviour
         isReadyToSpawn = false;
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Interactable")
-        {
-            isReadyToSpawn = false;
-        }
-    }
-
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Interactable")

@@ -16,6 +16,7 @@ public class PlaceScript : MonoBehaviour
         currentPlacedObject.GetComponent<Rigidbody>().isKinematic = true;
         currentPlacedObject.gameObject.transform.localPosition = new Vector3(0, placeHeight, 0);
         currentPlacedObject.gameObject.transform.localEulerAngles = Vector3.zero;
+        currentPlacedObject.isPlaced = true;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -32,6 +33,7 @@ public class PlaceScript : MonoBehaviour
         if (other.GetComponent<InteractableObject>() == currentPlacedObject)
         {
             isEmpty = true;
+            currentPlacedObject.isPlaced = false;
             currentPlacedObject = null;
         }
     }
