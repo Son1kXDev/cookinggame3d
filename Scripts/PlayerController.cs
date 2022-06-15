@@ -12,13 +12,11 @@ public class PlayerController : MonoBehaviour
 
     [Header("Взаимодействие")]
     [SerializeField] private Transform hands;
-    [SerializeField] private Transform defaultTransform;
-    [SerializeField] private InteractableObject pickedObject;
-    [SerializeField] private bool isInteracting;
     [SerializeField] private Transform dropPos;
-
-    public bool inTrigger = false;
-    public InteractableObject tempTrigger;
+    private bool isInteracting;
+    private InteractableObject pickedObject;
+    [HideInInspector] public bool inTrigger = false;
+    [HideInInspector] public InteractableObject tempTrigger;
 
     private void Start()
     {
@@ -37,6 +35,11 @@ public class PlayerController : MonoBehaviour
         float vertical = Input.GetAxisRaw("Vertical");
 
         Vector3 moveDirection = new Vector3(horizontal, 0f, vertical).normalized;
+
+        if (!controller.isGrounded)
+        {
+            moveDirection.y -= 1 * Time.deltaTime;
+        }
 
         if (moveDirection.magnitude >= 0.1f)
         {
@@ -67,13 +70,14 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void PickUp()
+    private void PickUp()
     {
         if (isInteracting || tempTrigger.isPickedUp) return;
 
         pickedObject = tempTrigger;
         pickedObject.isPickedUp = true;
         pickedObject.GetComponent<Rigidbody>().isKinematic = true;
+        pickedObject.GetComponent<MeshCollider>().enabled = false;
         pickedObject.gameObject.transform.SetParent(hands);
         pickedObject.gameObject.transform.localPosition = Vector3.zero;
         pickedObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
@@ -91,6 +95,7 @@ public class PlayerController : MonoBehaviour
         Vector3 dir = BallisticVel(50);
         pickedObject.GetComponent<Rigidbody>().velocity = dir;
         pickedObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+        pickedObject.GetComponent<MeshCollider>().enabled = true;
         pickedObject = null;
     }
 
@@ -106,5 +111,23 @@ public class PlayerController : MonoBehaviour
 
         float vel = Mathf.Sqrt(dist * Physics.gravity.magnitude / Mathf.Sin(2 * a));
         return vel * dir.normalized;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Interactable")
+        {
+            inTrigger = true;
+            tempTrigger = other.GetComponent<InteractableObject>();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Interactable")
+        {
+            inTrigger = false;
+            tempTrigger = null;
+        }
     }
 }
