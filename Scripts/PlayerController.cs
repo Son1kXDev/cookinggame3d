@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform defaultTransform;
     [SerializeField] private InteractableObject pickedObject;
     [SerializeField] private bool isInteracting;
+    [SerializeField] private Transform dropPos;
 
     public bool inTrigger = false;
     public InteractableObject tempTrigger;
@@ -72,8 +73,10 @@ public class PlayerController : MonoBehaviour
 
         pickedObject = tempTrigger;
         pickedObject.isPickedUp = true;
+        pickedObject.GetComponent<Rigidbody>().isKinematic = true;
         pickedObject.gameObject.transform.SetParent(hands);
         pickedObject.gameObject.transform.localPosition = Vector3.zero;
+        pickedObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
         isInteracting = true;
     }
 
@@ -81,8 +84,27 @@ public class PlayerController : MonoBehaviour
     {
         if (pickedObject == null) return;
 
+        pickedObject.GetComponent<Rigidbody>().isKinematic = false;
         pickedObject.isPickedUp = false;
         pickedObject.gameObject.transform.SetParent(null);
         isInteracting = false;
+        Vector3 dir = BallisticVel(50);
+        pickedObject.GetComponent<Rigidbody>().velocity = dir;
+        pickedObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+        pickedObject = null;
+    }
+
+    private Vector3 BallisticVel(float angle)
+    {
+        Vector3 dir = dropPos.position - pickedObject.gameObject.transform.position;
+        float h = dir.y;
+        dir.y = 0;
+        float dist = dir.magnitude;
+        float a = angle * Mathf.Deg2Rad;
+        dir.y = dist * Mathf.Tan(a);
+        dist += h / Mathf.Tan(a);
+
+        float vel = Mathf.Sqrt(dist * Physics.gravity.magnitude / Mathf.Sin(2 * a));
+        return vel * dir.normalized;
     }
 }

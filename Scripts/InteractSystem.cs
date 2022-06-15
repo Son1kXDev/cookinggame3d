@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InteractSystem : MonoBehaviour
 {
-    [SerializeField] private PlayerController player;
+    private PlayerController player;
 
     private void Awake()
     {
