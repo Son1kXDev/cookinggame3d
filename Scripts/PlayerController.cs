@@ -13,10 +13,12 @@ public class PlayerController : MonoBehaviour
     [Header("Взаимодействие")]
     [SerializeField] private Transform hands;
     [SerializeField] private Transform dropPos;
-    private bool isInteracting;
+    private ItemSpawner spawner;
     private InteractableObject pickedObject;
-    [HideInInspector] public bool inTrigger = false;
     [HideInInspector] public InteractableObject tempTrigger;
+    [HideInInspector] public bool inTrigger = false;
+    private bool isInteracting;
+    private bool inSpawner;
 
     private void Start()
     {
@@ -26,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         Moving();
-        PickNDrop();
+        Interactable();
     }
 
     private void Moving()
@@ -51,11 +53,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void PickNDrop()
+    private void Interactable()
     {
-        if (!inTrigger) return;
-
-        if (Input.GetKeyDown(KeyCode.E))
+        if (inTrigger && Input.GetKeyDown(KeyCode.E))
         {
             switch (isInteracting)
             {
@@ -67,6 +67,10 @@ public class PlayerController : MonoBehaviour
                     PickUp();
                     break;
             }
+        }
+        if (inSpawner && Input.GetKeyDown(KeyCode.Q))
+        {
+            spawner.Spawn();
         }
     }
 
@@ -80,7 +84,7 @@ public class PlayerController : MonoBehaviour
         pickedObject.GetComponent<MeshCollider>().enabled = false;
         pickedObject.gameObject.transform.SetParent(hands);
         pickedObject.gameObject.transform.localPosition = Vector3.zero;
-        pickedObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+        pickedObject.transform.localEulerAngles = Vector3.zero;
         isInteracting = true;
     }
 
@@ -94,7 +98,7 @@ public class PlayerController : MonoBehaviour
         isInteracting = false;
         Vector3 dir = BallisticVel(50);
         pickedObject.GetComponent<Rigidbody>().velocity = dir;
-        pickedObject.transform.localRotation = new Quaternion(0, 0, 0, 0);
+        pickedObject.transform.localEulerAngles = Vector3.zero;
         pickedObject.GetComponent<MeshCollider>().enabled = true;
         pickedObject = null;
     }
@@ -120,6 +124,11 @@ public class PlayerController : MonoBehaviour
             inTrigger = true;
             tempTrigger = other.GetComponent<InteractableObject>();
         }
+        if (other.CompareTag("Spawner"))
+        {
+            inSpawner = true;
+            spawner = other.GetComponent<ItemSpawner>();
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -128,6 +137,15 @@ public class PlayerController : MonoBehaviour
         {
             inTrigger = false;
             tempTrigger = null;
+        }
+        if (pickedObject != null && other.GetComponent<InteractableObject>() == pickedObject)
+        {
+            inTrigger = true;
+        }
+        if (other.CompareTag("Spawner"))
+        {
+            inSpawner = false;
+            spawner = null;
         }
     }
 }
