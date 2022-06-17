@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5751812989444904257}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.96, y: 0.75, z: 5.498}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5751812989467381125}
@@ -58,7 +58,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5751812989467381124}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.178, z: 0}
+  m_LocalPosition: {x: 0, y: 0.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5751812989444904258}
@@ -75,8 +75,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1.3, y: 1.5, z: 1.3}
-  m_Center: {x: 0, y: 0.75, z: 0}
+  m_Size: {x: 0.74221534, y: 1.2311766, z: 1.1142226}
+  m_Center: {x: 0.010797054, y: 0.4905883, z: 0.07089251}
 --- !u!114 &5751812989467381127
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -105,15 +105,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalScale.x
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalScale.y
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalScale.z
-      value: 10
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalPosition.x
@@ -125,11 +125,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalRotation.x
@@ -137,11 +137,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -149,7 +149,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -171,6 +171,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 0f42df7f4c3c01b4cadb174b631f3554, type: 3}
   m_PrefabInstance: {fileID: 3237184158818944588}
   m_PrefabAsset: {fileID: 0}
+--- !u!65 &1535833303314752645
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2318685333864184605}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.12519912, y: 0.06770404, z: 0.11436276}
+  m_Center: {x: -0.0000000037252916, y: 0.03385202, z: 0}
 --- !u!64 &2223859432848078384
 MeshCollider:
   m_ObjectHideFlags: 0

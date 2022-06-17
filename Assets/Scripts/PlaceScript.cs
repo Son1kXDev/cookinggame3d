@@ -30,7 +30,7 @@ public class PlaceScript : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.GetComponent<InteractableObject>() == currentPlacedObject)
+        if (other.GetComponent<InteractableObject>() == currentPlacedObject && currentPlacedObject != null)
         {
             isEmpty = true;
             currentPlacedObject.isPlaced = false;

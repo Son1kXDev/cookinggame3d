@@ -13,13 +13,13 @@ public class PlayerController : MonoBehaviour
     [Header("Взаимодействие")]
     [SerializeField] private Transform hands;
     [SerializeField] private Transform dropPos;
-    private ItemSpawner spawner;
-    private InteractableObject pickedObject;
+    public ItemSpawner spawner;
+    [HideInInspector] public InteractableObject pickedObject;
     [HideInInspector] public InteractableObject tempTrigger;
     [HideInInspector] public bool inTrigger = false;
     [HideInInspector] public bool waitForCut = false;
-    private bool isInteracting;
-    private bool inSpawner;
+    [HideInInspector] public bool isInteracting;
+    [HideInInspector] public bool inSpawner;
 
     private void Start()
     {
@@ -40,17 +40,11 @@ public class PlayerController : MonoBehaviour
 
         Vector3 moveDirection = new Vector3(horizontal, 0f, vertical).normalized;
 
-        if (!controller.isGrounded)
-        {
-            moveDirection.y -= 1 * Time.deltaTime;
-        }
-
         if (moveDirection.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(moveDirection.x, moveDirection.z) * Mathf.Rad2Deg;
             float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref smoothRotate, rotateTime);
             transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
             controller.Move(moveDirection * speed * Time.deltaTime);
         }
     }
@@ -124,37 +118,5 @@ public class PlayerController : MonoBehaviour
 
         float vel = Mathf.Sqrt(dist * Physics.gravity.magnitude / Mathf.Sin(2 * a));
         return vel * dir.normalized;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Interactable")
-        {
-            inTrigger = true;
-            tempTrigger = other.GetComponent<InteractableObject>();
-        }
-        if (other.CompareTag("Spawner"))
-        {
-            inSpawner = true;
-            spawner = other.GetComponent<ItemSpawner>();
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.tag == "Interactable")
-        {
-            inTrigger = false;
-            tempTrigger = null;
-        }
-        if (pickedObject != null && other.GetComponent<InteractableObject>() == pickedObject)
-        {
-            inTrigger = true;
-        }
-        if (other.CompareTag("Spawner"))
-        {
-            inSpawner = false;
-            spawner = null;
-        }
     }
 }
